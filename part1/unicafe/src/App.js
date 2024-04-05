@@ -27,11 +27,11 @@ const App = () => {
           <Statistic text="Average" value={average} />
           <Statistic text="Positive" value={positive} />
         </div>
-      );
+      ); 
   };
   return (
     <div>
-      <h1>give feedback</h1>
+      <h1>Give feedback</h1>
       <p>
         <button onClick={() => setGood(good + 1)}>good</button>
         <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
