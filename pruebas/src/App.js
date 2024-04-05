@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
 
-function App() {
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>{text}</button>  
+)
+
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = (newValue) => () => {
+    console.log('value now', newValue)  // imprime el nuevo valor en la consola
+    setValue(newValue)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {value}
+      <Button onClick={setToValue(1000)} text={1000}/>
+      <Button onClick={setToValue(0)} text={0}/>
+      <Button onClick={setToValue(value + 1)} text={'Aumentar en 1'}/>
     </div>
-  );
+  )
 }
 
 export default App;
