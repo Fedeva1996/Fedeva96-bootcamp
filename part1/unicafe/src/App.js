@@ -11,34 +11,37 @@ const App = () => {
   let positive = (good / all) * 100;
 
   const Statistic = ({ text, value }) => (
-    <p>
-      {text}: {value}
-    </p>
+    <tr>
+      <td>{text}:</td>
+      <td>{value}</td>
+    </tr>
   );
   const Statistics = () => {
     if (all === 0) return <p>No feedback given</p>;
     else
       return (
-        <div>
-          <Statistic text="Good" value={good} />
-          <Statistic text="Neutral" value={neutral} />
-          <Statistic text="Bad" value={bad} />
-          <Statistic text="All" value={all} />
-          <Statistic text="Average" value={average} />
-          <Statistic text="Positive" value={positive} />
-        </div>
-      ); 
+        <table>
+          <tbody>
+            <Statistic text="Good" value={good} />
+            <Statistic text="Neutral" value={neutral} />
+            <Statistic text="Bad" value={bad} />
+            <Statistic text="All" value={all} />
+            <Statistic text="Average" value={average} />
+            <Statistic text="Positive" value={positive} />
+          </tbody>
+        </table>
+      );
   };
 
-const Button = ({ text, onClick }) => (
+  const Button = ({ text, onClick }) => (
     <button onClick={onClick}>{text}</button>
-)
+  );
 
   return (
     <div>
       <h1>Give feedback</h1>
       <p>
-        <Button onClick={() => setGood(good + 1)} text="Good"/>
+        <Button onClick={() => setGood(good + 1)} text="Good" />
         <Button onClick={() => setNeutral(neutral + 1)} text="Neutral" />
         <Button onClick={() => setBad(bad + 1)} text="Bad" />
       </p>
