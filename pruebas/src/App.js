@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Note } from "./Note.js";
-const App = (props) => {
-  const [notes, setNotes] = useState(props.notes);
+import axios from "axios";
+
+const App = () => {
+  const [notes, setNotes] = useState([]);
   const [newNote, setNewNotes] = useState("");
-  const [showAll, setShowAll] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    console.log("renderizado");
+    setIsLoading(true);
+    axios.get("http://localhost:3001/notes").then((response) => {
+      const { data } = response;
+      setNotes(data);
+      setIsLoading(false);
+    });
+  }, []);
 
   const handleChange = (event) => {
     setNewNotes(event.target.value);
@@ -14,32 +26,20 @@ const App = (props) => {
     console.log("nota creada");
     const noteToObject = {
       id: notes.length + 1,
-      content: newNote,
-      important: Math.random() > 0.5,
+      title: newNote,
+      body: newNote + "-body",
     };
     console.log(noteToObject);
     setNotes(notes.concat(noteToObject));
     setNewNotes("");
-    /*{
-      id: 1,
-      content: 'HTML is easy',
-      important: true
-    },*/
-  };
-  const handleShowAll = () => {
-    setShowAll(!showAll);
   };
   return (
     <div>
       <h1>Notes</h1>
-      <button onClick={handleShowAll}>
-        {showAll ? "Show all" : "Show only important"}
-      </button>
+      {isLoading ? "Cargando..." : ""}
       <ol>
-        {notes
-        .filter((note) => showAll || note.important)
-        .map((note) => (
-          <Note key={note.id} content={note.content} />
+        {notes.map((note) => (
+          <Note key={note.id} title={note.title} body={note.body} />
         ))}
       </ol>
       <form onSubmit={handleClick}>
