@@ -1,4 +1,7 @@
 import { useState } from "react";
+import Filter from "./Filter";
+import PersonForm from "./PersonForm";
+import Persons from "./Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -20,7 +23,7 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const personObject = { name: newName, number: newNumber };
+    const personObject = { name: newName, number: newNumber, id: persons.length + 1};
     if (persons.find((person) => person.name === newName)) {
       alert(newName + " ya existe en la lista");
       return;
@@ -39,29 +42,11 @@ const App = () => {
   return (
     <div>
       <h2>Filter</h2>
-      <div>
-        Name: <input onChange={handleFilter} />
-      </div>
+      <Filter handleFilter={handleFilter} />
       <h2>Add new</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          Name: <input onChange={handleName} value={newName} />
-        </div>
-        <div>
-          Number: <input onChange={handleNumber} value={newNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm handleName={handleName} handleNumber={handleNumber} handleSubmit={handleSubmit} newName={newName} newNumber={newNumber} />
       <h2>Numbers</h2>
-      {persons
-        .filter((person) => person.name.toLowerCase().includes(newFilter.toLowerCase()))
-        .map((person) => (
-          <p>
-            {person.name}: {person.number}
-          </p>
-        ))}
+      <Persons persons={persons} newFilter={newFilter} />
     </div>
   );
 };
