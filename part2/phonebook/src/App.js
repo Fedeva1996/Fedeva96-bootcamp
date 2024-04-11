@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
-import axios from "axios";
+import PersonsServices from "./Services/PersonsServices.js";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -13,9 +13,8 @@ const App = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    axios.get("http://localhost:3001/persons").then((response) => {
-      const { data } = response;
-      setPersons(data);
+    PersonsServices.getAll().then((response) => {
+      setPersons(response);
       setIsLoading(false);
     });
   }, []);
@@ -41,14 +40,17 @@ const App = () => {
       alert(newNumber + " ya existe en la lista");
       return;
     }
-    setPersons(persons.concat(personObject));
-    setNewName("");
-    setNewNumber("");
+    PersonsServices.create(personObject).then((response) => {
+      setPersons(persons.concat(response));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleFilter = (event) => {
     setNewFilter(event.target.value);
   };
+
   return (
     <div>
       <h2>Filter</h2>
@@ -62,6 +64,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
+      {isLoading ? <p>Loading...</p> : ""}
       <Persons persons={persons} newFilter={newFilter} />
     </div>
   );
