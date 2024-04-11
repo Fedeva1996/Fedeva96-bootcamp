@@ -26,20 +26,44 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: toString(persons.length + 1),
+      id: (persons.length + 1).toString(),
     };
     if (persons.find((person) => person.name === newName)) {
-      alert(newName + " ya existe en la lista");
-      return;
-    } else if (persons.find((person) => person.number === newNumber)) {
-      alert(newNumber + " ya existe en la lista");
-      return;
+      if (
+        window.confirm(newName + " ya existe en la lista, ¿desea actualizarlo?")
+      ) {
+        handleUpdate(
+          persons.find((person) => person.name === newName).id,
+          newNumber
+        );
+      } else {
+        alert("Operacion cancelada");
+        return;
+      }
     }
     PersonsServices.create(personObject).then((response) => {
       setPersons(persons.concat(response));
       setNewName("");
       setNewNumber("");
     });
+  };
+
+  //update
+  const handleUpdate = (id, newNumber) => {
+    const person = persons.find((person) => person.id === id);
+    const changedNumber = { ...person, number: newNumber };
+
+    PersonsServices.update(id, changedNumber)
+      .then((returnedNumber) => {
+        setPersons(
+          persons.map((person) => (person.id !== id ? person : returnedNumber))
+        );
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   //delete
