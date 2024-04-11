@@ -1,4 +1,4 @@
-const Persons = ({ persons, newFilter }) => (
+const Persons = ({ persons, newFilter, handleDelete }) => (
   <div>
     {persons
       .filter((person) =>
@@ -7,8 +7,10 @@ const Persons = ({ persons, newFilter }) => (
       .map((person) => (
         <p key={person.id}>
           {person.name}: {person.number}
+          <button onClick={() => handleDelete(person.id)}>Borrar</button>
         </p>
       ))}
   </div>
 );
+
 export default Persons;

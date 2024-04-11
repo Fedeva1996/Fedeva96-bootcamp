@@ -11,6 +11,7 @@ const App = () => {
   const [newFilter, setNewFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  //get all
   useEffect(() => {
     setIsLoading(true);
     PersonsServices.getAll().then((response) => {
@@ -19,19 +20,13 @@ const App = () => {
     });
   }, []);
 
-  const handleName = (event) => {
-    setNewName(event.target.value);
-  };
-  const handleNumber = (event) => {
-    setNewNumber(event.target.value);
-  };
-
+  //create new
   const handleSubmit = (event) => {
     event.preventDefault();
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
+      id: toString(persons.length + 1),
     };
     if (persons.find((person) => person.name === newName)) {
       alert(newName + " ya existe en la lista");
@@ -45,6 +40,27 @@ const App = () => {
       setNewName("");
       setNewNumber("");
     });
+  };
+
+  //delete
+  const handleDelete = (id) => {
+    if (window.confirm("Seguro que quieres borrar?")) {
+      PersonsServices.drop(id)
+        .then((response) => {
+          setPersons(persons.filter((person) => person.id !== id));
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      window.alert("Operacion cancelada");
+    }
+  };
+  const handleName = (event) => {
+    setNewName(event.target.value);
+  };
+  const handleNumber = (event) => {
+    setNewNumber(event.target.value);
   };
 
   const handleFilter = (event) => {
@@ -65,7 +81,11 @@ const App = () => {
       />
       <h2>Numbers</h2>
       {isLoading ? <p>Loading...</p> : ""}
-      <Persons persons={persons} newFilter={newFilter} />
+      <Persons
+        persons={persons}
+        newFilter={newFilter}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
