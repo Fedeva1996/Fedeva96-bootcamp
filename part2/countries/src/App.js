@@ -25,6 +25,10 @@ function App() {
     setFilter(event.target.value);
   };
 
+  const handleButton = (name) => {
+    setFilter(name);
+  };
+
   return (
     <div className="App">
       Find countries <input onChange={handleFilter}></input>
@@ -38,7 +42,11 @@ function App() {
           ).length === 1 ? (
           <Country countries={countries} filter={filter} />
         ) : (
-          <Countries countries={countries} filter={filter} />
+          <Countries
+            countries={countries}
+            filter={filter}
+            handleButton={handleButton}
+          />
         )
       ) : (
         "Cargando"
