@@ -3,6 +3,7 @@ import Filter from "./Filter";
 import PersonForm from "./PersonForm";
 import Persons from "./Persons";
 import PersonsServices from "./Services/PersonsServices.js";
+import Notification from "./Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,6 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setNewFilter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [className, setClassName] = useState("");
 
   //get all
   useEffect(() => {
@@ -36,16 +39,32 @@ const App = () => {
           persons.find((person) => person.name === newName).id,
           newNumber
         );
+        return;
       } else {
         alert("Operacion cancelada");
         return;
       }
     }
-    PersonsServices.create(personObject).then((response) => {
-      setPersons(persons.concat(response));
-      setNewName("");
-      setNewNumber("");
-    });
+    PersonsServices.create(personObject)
+      .then((response) => {
+        setPersons(persons.concat(response));
+        setMessage("Nueva persona");
+        setClassName("success");
+        setTimeout(() => {
+          setMessage("");
+          setClassName("");
+        }, 2000);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        setMessage("Error: " + error);
+        setClassName("error");
+        setTimeout(() => {
+          setMessage("");
+          setClassName("");
+        }, 2000);
+      });
   };
 
   //update
@@ -58,11 +77,23 @@ const App = () => {
         setPersons(
           persons.map((person) => (person.id !== id ? person : returnedNumber))
         );
+        setMessage("Numero actualizado");
+        setClassName("success");
+        setTimeout(() => {
+          setMessage("");
+          setClassName("");
+        }, 2000);
         setNewName("");
         setNewNumber("");
       })
       .catch((error) => {
-        console.error(error);
+        setMessage(`Los datos de ${person.name} ya no estan en el servidor. Error: ${error}`);
+        setClassName("error");
+        setPersons(persons.filter((person) => person.id !== id));
+        setTimeout(() => {
+          setMessage("");
+          setClassName("");
+        }, 2000);
       });
   };
 
@@ -72,9 +103,20 @@ const App = () => {
       PersonsServices.drop(id)
         .then((response) => {
           setPersons(persons.filter((person) => person.id !== id));
+          setMessage("Persona eliminada");
+          setClassName("success");
+          setTimeout(() => {
+            setMessage("");
+            setClassName("");
+          }, 2000);
         })
         .catch((error) => {
-          console.error(error);
+          setMessage("Error: " + error);
+          setClassName("error");
+          setTimeout(() => {
+            setMessage("");
+            setClassName("");
+          }, 2000);
         });
     } else {
       window.alert("Operacion cancelada");
@@ -96,6 +138,7 @@ const App = () => {
       <h2>Filter</h2>
       <Filter handleFilter={handleFilter} />
       <h2>Add new</h2>
+      <Notification message={message} className={className} />
       <PersonForm
         handleName={handleName}
         handleNumber={handleNumber}
