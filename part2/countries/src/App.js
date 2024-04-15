@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Countries from "./Countries";
-import Country from "./Country";
+import Countries from "./Components/Countries";
 import CountriesServices from "./Services/CountriesServices";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -25,29 +24,15 @@ function App() {
     setFilter(event.target.value);
   };
 
-  const handleButton = (name) => {
-    setFilter(name);
+  const handleShow = (name) => {
+    setFilter(name)
   };
 
   return (
     <div className="App">
       Find countries <input onChange={handleFilter}></input>
       {loading === false ? (
-        countries.filter((country) =>
-          country.name.common.toLowerCase().includes(filter.toLowerCase())
-        ).length > 10 ? (
-          <p>To many matches, specify another filter</p>
-        ) : countries.filter((country) =>
-            country.name.common.toLowerCase().includes(filter.toLowerCase())
-          ).length === 1 ? (
-          <Country countries={countries} filter={filter} />
-        ) : (
-          <Countries
-            countries={countries}
-            filter={filter}
-            handleButton={handleButton}
-          />
-        )
+        <Countries countries={countries} handleShow={handleShow} filter={filter} />
       ) : (
         "Cargando"
       )}
