@@ -59,7 +59,12 @@ app.post("/api/persons", (request, response) => {
     return response.status(400).json({
       error: "name or number missing",
     });
+  } else if (personas.find((person) => person.name === body.name)) {
+    return response.status(400).json({
+      error: "name must be unique",
+    });
   }
+
   const ids = personas.map((person) => person.id);
   const maxId = Math.max(...ids);
 
