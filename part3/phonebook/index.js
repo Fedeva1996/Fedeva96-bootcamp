@@ -46,6 +46,12 @@ app.get("/api/persons/:id", (request, response) => {
   }
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  const id = Number(request.params.id);
+  personas = personas.filter((person) => person.id !== id);
+  response.status(204).end();
+});
+
 const port = 3001;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
