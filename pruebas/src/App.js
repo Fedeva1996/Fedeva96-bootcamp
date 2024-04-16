@@ -54,8 +54,7 @@ const App = () => {
     const noteToObject = {
       userId: 1,
       id: notes.length + 1,
-      title: newNote,
-      body: newNote + "-body",
+      content: newNote,
     };
     noteService
       .create(noteToObject)
@@ -100,8 +99,7 @@ const App = () => {
         {notes.map((note) => (
           <Note
             key={note.id}
-            title={note.title}
-            body={note.body}
+            body={note.content}
             important={note.important}
             toggleImportance={() => toggleImportanceOf(note.id)}
           />
