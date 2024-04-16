@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
+var morgan = require('morgan')
 
 app.use(express.json());
+app.use(morgan('tiny'))
+
 
 let personas = [
   {
@@ -77,6 +80,10 @@ app.post("/api/persons", (request, response) => {
   personas = [...personas, newPerson];
   response.status(201).json(newPerson);
 });
+
+morgan('combined', {
+  skip: function (req, res) { return res.statusCode < 400 }
+})
 
 const port = 3001;
 app.listen(port, () => {
