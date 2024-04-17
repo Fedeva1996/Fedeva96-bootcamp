@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "build:ui": "@powershell Remove-Item -Recurse -Force build && cd ../../part2/phonebook && npm run build && @powershell Copy-Item build -Recurse ../../part3/phonebook",    
+    "build:ui": "@powershell Remove-Item -Recurse -Force build && cd ../../part2/phonebook && npm run build && @powershell Copy-Item build -Recurse ../../part3/phonebook",
     "deploy": "fly deploy",
-    "deploy:full": "npm run build:ui && npm run deploy",    
+    "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,6 +20,7 @@
     "nodemon": "^3.1.0"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.5",
     "nodemon": "3.1.0"
   }
 }
