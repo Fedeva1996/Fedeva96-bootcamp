@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for pruebas-node on 2024-04-16T14:26:34-04:00
+# fly.toml app configuration file generated for node-fly on 2024-04-17T15:34:55-04:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'pruebas-node'
+app = 'node-fly'
 primary_region = 'eze'
 
 [build]

@@ -1,8 +1,6 @@
+part3/phonebook/.env
 pruebas/.gitignore
-pruebas-node/eslint.config.mjs
-pruebas-node/index.js
-pruebas-node/package-lock.json
-pruebas-node/package.json
+pruebas-node/.env
 pruebas-node/node_modules/.package-lock.json
 pruebas-node/node_modules/.bin/acorn
 pruebas-node/node_modules/.bin/acorn.cmd
@@ -6010,7 +6008,3 @@ pruebas-node/node_modules/yocto-queue/index.js
 pruebas-node/node_modules/yocto-queue/license
 pruebas-node/node_modules/yocto-queue/package.json
 pruebas-node/node_modules/yocto-queue/readme.md
-pruebas-node/Request/create.rest
-pruebas-node/Request/delete.rest
-pruebas-node/Request/get_all.rest
-pruebas-node/Request/get_one.rest
