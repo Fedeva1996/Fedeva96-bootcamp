@@ -37,29 +37,6 @@ app.get("/api/persons", (request, response) => {
   });
 });
 
-app.get("/info", (request, response) => {
-  People.find({}).then((person) => {
-    response.json(`<p>Phonebook has info for ${person.length} people</p>`);
-  });
-});
-
-app.get("/api/persons/:id", (request, response) => {
-  const { id } = request.params;
-
-  people
-    .findById(id)
-    .then((person) => {
-      if (person) {
-        response.json(person);
-      } else {
-        response.status(404).end();
-      }
-    })
-    .catch((error) => {
-      next(error);
-    });
-});
-
 app.delete("/api/persons/:id", (request, response) => {
   const { id } = request.params;
 
@@ -122,6 +99,29 @@ app.post("/api/persons", (request, response) => {
     .catch((error) => {
       response.status(500).json({ error: error.message });
       console.log(error);
+    });
+});
+
+app.get("/info", (request, response) => {
+  People.find({}).then((person) => {
+    response.json(`<p>Phonebook has info for ${person.length} people</p>`);
+  });
+});
+
+app.get("/api/persons/:id", (request, response) => {
+  const { id } = request.params;
+
+  people
+    .findById(id)
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      next(error);
     });
 });
 
