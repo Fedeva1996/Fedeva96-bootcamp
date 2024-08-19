@@ -59,12 +59,9 @@ app.post("/api/notes", (request, response) => {
 
   if (!note || !note.content) {
     return response.status(400).json({
-      error: "note.content is missing",
+      error: "content is missing",
     });
   }
-
-  const ids = notes.map((note) => note.id);
-  const maxId = Math.max(...ids);
 
   const newNote = new Note({
     content: note.content,

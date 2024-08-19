@@ -10,13 +10,12 @@ mongoose.connect(url).then(result => {
   console.error("error connecting to database", error.message); 
 });
 
-const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
-  important: Boolean,
+const peopleSchema = new mongoose.Schema({
+  name: String,
+  number: String,
 });
 
-noteSchema.set("toJSON", {
+peopleSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id
     delete returnedObject._id
@@ -24,6 +23,6 @@ noteSchema.set("toJSON", {
   },
 });
 
-const Note = mongoose.model("Note", noteSchema);
+const People = mongoose.model("people", peopleSchema, "people");
 
-module.exports = Note;
+module.exports = People;
