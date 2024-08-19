@@ -4,22 +4,35 @@ mongoose.set("strictQuery", false);
 
 const url = process.env.MONGODB_URI;
 
-mongoose.connect(url).then(result => {
-  console.log("connected to database");
-}).catch(error => {
-  console.error("error connecting to database", error.message); 
-});
+mongoose
+  .connect(url)
+  .then((result) => {
+    console.log("connected to database");
+  })
+  .catch((error) => {
+    console.error("error connecting to database", error.message);
+  });
 
 const peopleSchema = new mongoose.Schema({
-  name: {type: String, required: true, minLength: 3},
-  number: {type: String, required: true, minLength: 10}
+  name: { type: String, required: true, minLength: 3 },
+  number: {
+    type: String,
+    required: true,
+    minLength: 8,
+    validate: {
+      validator: function (v) {
+        return /^\d{2,3}-\d{5,}$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid phone number! Correct format is 00-00000 or 000-0000`,
+    },
+  },
 });
 
 peopleSchema.set("toJSON", {
   transform: (document, returnedObject) => {
-    returnedObject.id = returnedObject._id
-    delete returnedObject._id
-    delete returnedObject.__v
+    returnedObject.id = returnedObject._id;
+    delete returnedObject._id;
+    delete returnedObject.__v;
   },
 });
 

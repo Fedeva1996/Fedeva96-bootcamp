@@ -54,7 +54,7 @@ app.delete("/api/notes/:id", (request, response, next) => {
     });
 });
 
-app.post("/api/notes", (request, response) => {
+app.post("/api/notes", (request, response, next) => {
   const note = request.body;
 
   if (!note || !note.content) {
@@ -69,9 +69,12 @@ app.post("/api/notes", (request, response) => {
     important: note.important || false,
   });
 
-  newNote.save().then((saveNote) => {
-    response.status(201).json(saveNote);
-  });
+  newNote
+    .save()
+    .then((saveNote) => {
+      response.status(201).json(saveNote);
+    })
+    .catch((error) => next(error));
 });
 
 app.put("/api/notes/:id", (request, response, next) => {
@@ -83,7 +86,11 @@ app.put("/api/notes/:id", (request, response, next) => {
     important: note.important,
   };
 
-  Note.findByIdAndUpdate(id, newNoteInfo, { new: true })
+  Note.findByIdAndUpdate(id, newNoteInfo, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
     .then((updatedNote) => {
       response.json(updatedNote);
     })
