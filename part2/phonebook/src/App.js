@@ -137,7 +137,7 @@ const App = () => {
     <div>
       <h2>Filter</h2>
       <Filter handleFilter={handleFilter} />
-      <h2>Add new</h2>
+      <h2>Nueva persona</h2>
       <Notification message={message} className={className} />
       <PersonForm
         handleName={handleName}
