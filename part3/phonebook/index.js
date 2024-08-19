@@ -46,7 +46,8 @@ app.get("/info", (request, response) => {
 app.get("/api/persons/:id", (request, response) => {
   const { id } = request.params;
 
-  people.findById(id)
+  people
+    .findById(id)
     .then((person) => {
       if (person) {
         response.json(person);
@@ -68,6 +69,21 @@ app.delete("/api/persons/:id", (request, response) => {
     })
     .catch((error) => {
       next(error);
+      console.log(error);
+    });
+});
+
+app.put("/api/persons/:id", (request, response) => {
+  const { id } = request.params;
+  const body = request.body;
+
+  People.findByIdAndUpdate(id, body, { new: true })
+    .then((updatedPerson) => {
+      response.json(updatedPerson);
+    })
+    .catch((error) => {
+      next(error);
+      console.log(error);
     });
 });
 
@@ -80,26 +96,33 @@ app.post("/api/persons", (request, response) => {
     });
   }
 
-  People.findOne({ name: body.name }).then(existingPerson => {
-    if (existingPerson) {
-      return response.status(400).json({
-        error: "name already exists",
+  People.findOne({ name: body.name })
+    .then((existingPerson) => {
+      if (existingPerson) {
+        return response.status(400).json({
+          error: "name already exists",
+        });
+      }
+
+      const newPerson = new People({
+        name: body.name,
+        number: body.number,
       });
-    }
 
-    const newPerson = new People({
-      name: body.name,
-      number: body.number,
-    });
-
-    newPerson.save().then(savedPerson => {
-      response.status(201).json(savedPerson);
-    }).catch(error => {
+      newPerson
+        .save()
+        .then((savedPerson) => {
+          response.status(201).json(savedPerson);
+        })
+        .catch((error) => {
+          response.status(500).json({ error: error.message });
+          console.log(error);
+        });
+    })
+    .catch((error) => {
       response.status(500).json({ error: error.message });
+      console.log(error);
     });
-  }).catch(error => {
-    response.status(500).json({ error: error.message });
-  });
 });
 
 morgan("combined", {
