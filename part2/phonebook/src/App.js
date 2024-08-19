@@ -29,7 +29,6 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: (persons.length + 1).toString(),
     };
     if (persons.find((person) => person.name === newName)) {
       if (
@@ -58,12 +57,12 @@ const App = () => {
         setNewNumber("");
       })
       .catch((error) => {
-        setMessage("Error: " + error);
+        setMessage("Error: " + error.response.data.error);
         setClassName("error");
         setTimeout(() => {
           setMessage("");
           setClassName("");
-        }, 2000);
+        }, 6000);
       });
   };
 
@@ -93,7 +92,7 @@ const App = () => {
         setTimeout(() => {
           setMessage("");
           setClassName("");
-        }, 2000);
+        }, 6000);
       });
   };
 
@@ -116,7 +115,7 @@ const App = () => {
           setTimeout(() => {
             setMessage("");
             setClassName("");
-          }, 2000);
+          }, 6000);
         });
     } else {
       window.alert("Operacion cancelada");

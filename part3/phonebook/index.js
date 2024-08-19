@@ -3,7 +3,6 @@ const cors = require("cors");
 const app = express();
 const morgan = require("morgan");
 require("dotenv").config();
-const people = require("./models/people");
 const People = require("./models/people");
 
 const notFound = require("./middleware/notFound");
@@ -32,23 +31,27 @@ app.get("/", (request, response) => {
 });
 
 app.get("/api/persons", (request, response) => {
-  response.json(personas);
+  People.find({}).then((person) => {
+    response.json(person);
+  });
 });
 
-app.get("/info", (request, response) => {
-  const info = `<p>Phonebook has info for ${personas.length} people</p>`;
-  const date = new Date();
-  response.send(info + date);
-});
 
 app.get("/api/persons/:id", (request, response) => {
-  const id = Number(request.params.id);
-  const person = personas.find((person) => person.id === id);
-  if (person) {
-    response.json(person);
-  } else {
-    response.status(404).end();
-  }
+  const { id } = request.params;
+
+  People
+    .findById(id)
+    .then((person) => {
+      if (person) {
+        response.json(person);
+      } else {
+        response.status(404).end();
+      }
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 app.delete("/api/persons/:id", (request, response) => {
@@ -60,7 +63,6 @@ app.delete("/api/persons/:id", (request, response) => {
     })
     .catch((error) => {
       next(error);
-      console.log(error);
     });
 });
 
@@ -68,7 +70,11 @@ app.put("/api/persons/:id", (request, response) => {
   const { id } = request.params;
   const body = request.body;
 
-  People.findByIdAndUpdate(id, body, { new: true })
+  People.findByIdAndUpdate(id, body, {
+    new: true,
+    runValidators: true,
+    context: "query",
+  })
     .then((updatedPerson) => {
       response.json(updatedPerson);
     })
@@ -78,7 +84,7 @@ app.put("/api/persons/:id", (request, response) => {
     });
 });
 
-app.post("/api/persons", (request, response) => {
+app.post("/api/persons", (request, response, next) => {
   const body = request.body;
 
   if (!body.name || !body.number) {
@@ -106,13 +112,11 @@ app.post("/api/persons", (request, response) => {
           response.status(201).json(savedPerson);
         })
         .catch((error) => {
-          response.status(500).json({ error: error.message });
-          console.log(error);
+          next(error);
         });
     })
     .catch((error) => {
       response.status(500).json({ error: error.message });
-      console.log(error);
     });
 });
 
@@ -125,7 +129,7 @@ app.get("/info", (request, response) => {
 app.get("/api/persons/:id", (request, response) => {
   const { id } = request.params;
 
-  people
+  People
     .findById(id)
     .then((person) => {
       if (person) {
