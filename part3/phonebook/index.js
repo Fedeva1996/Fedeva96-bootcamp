@@ -6,6 +6,9 @@ require("dotenv").config();
 const people = require("./models/people");
 const People = require("./models/people");
 
+const notFound = require("./middleware/notFound");
+const handleError = require("./middleware/handleError");
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static("build"));
@@ -104,6 +107,9 @@ morgan("combined", {
     return res.statusCode < 400;
   },
 });
+
+app.use(notFound);
+app.use(handleError);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
