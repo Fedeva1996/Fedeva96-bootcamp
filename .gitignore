@@ -2,3 +2,5 @@
 **/build/
 **/.env
 **/.gitignore
+/pruebas/
+/pruebas-node/
