@@ -4,3 +4,4 @@
 **/.gitignore
 /pruebas/
 /pruebas-node/
+/node_modules
