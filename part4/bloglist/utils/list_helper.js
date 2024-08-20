@@ -24,8 +24,24 @@ const favoriteBlog = (blogs) => {
   return mostLikedBlog;
 };
 
+const authorWithMostBlogs = (blogs) => {
+  if (blogs.length === 0) return null;
+
+  let blogsByAuthor = Object.groupBy(blogs, ({ author }) => author);
+
+  let mostBlogsAuthor = Object.values(blogsByAuthor)[0];
+
+  for (const [key, value] of Object.entries(blogsByAuthor)) {
+    if (mostBlogsAuthor.length < blogsByAuthor[key].length)
+      mostBlogsAuthor = blogsByAuthor[key];
+  }
+
+  return { author: mostBlogsAuthor[0].author, blogs: mostBlogsAuthor.length };
+};
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  authorWithMostBlogs,
 };
