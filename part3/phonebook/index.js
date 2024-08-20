@@ -36,12 +36,10 @@ app.get("/api/persons", (request, response) => {
   });
 });
 
-
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response, next) => {
   const { id } = request.params;
 
-  People
-    .findById(id)
+  People.findById(id)
     .then((person) => {
       if (person) {
         response.json(person);
@@ -54,11 +52,11 @@ app.get("/api/persons/:id", (request, response) => {
     });
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   const { id } = request.params;
 
   People.findByIdAndDelete(id)
-    .then((result) => {
+    .then(() => {
       response.status(204).end();
     })
     .catch((error) => {
@@ -66,7 +64,7 @@ app.delete("/api/persons/:id", (request, response) => {
     });
 });
 
-app.put("/api/persons/:id", (request, response) => {
+app.put("/api/persons/:id", (request, response, next) => {
   const { id } = request.params;
   const body = request.body;
 
@@ -121,16 +119,15 @@ app.post("/api/persons", (request, response, next) => {
 });
 
 app.get("/info", (request, response) => {
-  People.find({}).then((person) => {
+  find({}).then((person) => {
     response.json(`<p>Phonebook has info for ${person.length} people</p>`);
   });
 });
 
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response, next) => {
   const { id } = request.params;
 
-  People
-    .findById(id)
+  People.findById(id)
     .then((person) => {
       if (person) {
         response.json(person);

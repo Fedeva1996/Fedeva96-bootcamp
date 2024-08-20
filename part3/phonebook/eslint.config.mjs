@@ -22,7 +22,6 @@ export default [
       },
     },
     rules: {
-      "@stylistic/js/indent": ["error", 2],
     },
     settings: {
       extends: "eslint:recommended",

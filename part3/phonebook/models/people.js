@@ -4,9 +4,8 @@ mongoose.set("strictQuery", false);
 
 const url = process.env.MONGODB_URI;
 
-mongoose
-  .connect(url)
-  .then((result) => {
+mongoose.connect(url)
+  .then(() => {
     console.log("connected to database");
   })
   .catch((error) => {
@@ -23,7 +22,8 @@ const peopleSchema = new mongoose.Schema({
       validator: function (v) {
         return /^\d{2,3}-\d{5,}$/.test(v);
       },
-      message: (props) => `${props.value} is not a valid phone number! Correct format is 00-00000 or 000-0000`,
+      message: (props) =>
+        `${props.value} is not a valid phone number! Correct format is 00-00000 or 000-0000`,
     },
   },
 });
