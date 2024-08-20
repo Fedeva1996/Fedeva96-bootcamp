@@ -24,24 +24,56 @@ const favoriteBlog = (blogs) => {
   return mostLikedBlog;
 };
 
-const authorWithMostBlogs = (blogs) => {
+const mostBlogs = (blogs) => {
   if (blogs.length === 0) return null;
 
-  let blogsByAuthor = Object.groupBy(blogs, ({ author }) => author);
+  const blogsByAuthor = blogs.reduce((acc, blog) => {
+    acc[blog.author] = (acc[blog.author] || 0) + 1;
+    return acc;
+  }, {});
 
-  let mostBlogsAuthor = Object.values(blogsByAuthor)[0];
+  let mostBlogsAuthor = { author: null, blogs: 0 };
 
-  for (const [key, value] of Object.entries(blogsByAuthor)) {
-    if (mostBlogsAuthor.length < blogsByAuthor[key].length)
-      mostBlogsAuthor = blogsByAuthor[key];
+  for (const [author, blogs] of Object.entries(blogsByAuthor)) {
+    if (blogs > mostBlogsAuthor.blogs) {
+      mostBlogsAuthor = { author, blogs };
+    }
   }
 
-  return { author: mostBlogsAuthor[0].author, blogs: mostBlogsAuthor.length };
+  return mostBlogsAuthor;
+};
+
+const mostLikes = (blogs) => {
+  const likesByAuthor = {};
+
+  blogs.forEach((blog) => {
+    if (likesByAuthor[blog.author]) {
+      likesByAuthor[blog.author] += blog.likes;
+    } else {
+      likesByAuthor[blog.author] = blog.likes;
+    }
+  });
+
+  let maxLikes = 0;
+  let mostLikedAuthor = null;
+
+  for (const author in likesByAuthor) {
+    if (likesByAuthor[author] > maxLikes) {
+      maxLikes = likesByAuthor[author];
+      mostLikedAuthor = author;
+    }
+  }
+
+  return {
+    author: mostLikedAuthor,
+    likes: maxLikes,
+  };
 };
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  authorWithMostBlogs,
+  mostBlogs,
+  mostLikes
 };
